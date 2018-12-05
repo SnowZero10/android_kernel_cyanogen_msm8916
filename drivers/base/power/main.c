@@ -599,22 +599,6 @@ static void dpm_resume_early(pm_message_t state)
 #endif
 
 	mutex_lock(&dpm_list_mtx);
-	pm_transition = state;
-
-	/*
-	 * Advanced the async threads upfront,
-	 * in case the starting of async threads is
-	 * delayed by non-async resuming devices.
-	 */
-	list_for_each_entry(dev, &dpm_late_early_list, power.entry) {
-		INIT_COMPLETION(dev->power.completion);
-		if (is_async(dev)) {
-			get_device(dev);
-			async_schedule(async_resume_early, dev);
-		}
-	}
-
-	mutex_lock(&dpm_list_mtx);
 	while (!list_empty(&dpm_late_early_list)) {
 		struct device *dev = to_device(dpm_late_early_list.next);
 		int error;

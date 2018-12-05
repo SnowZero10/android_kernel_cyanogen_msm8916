@@ -29,7 +29,6 @@ bool wl_blocker_debug = false;
 static void wakeup_source_deactivate(struct wakeup_source *ws);
 #endif
 
-
 /*
  * If set, the suspend/hibernate code will abort transitions to a sleep state
  * if wakeup events are registered during or immediately before the transition.
@@ -571,7 +570,6 @@ static void update_prevent_sleep_time(struct wakeup_source *ws, ktime_t now)
 static inline void update_prevent_sleep_time(struct wakeup_source *ws,
 					     ktime_t now) {}
 #endif
-
 
 /**
  * wakup_source_deactivate - Mark given wakeup source as inactive.
