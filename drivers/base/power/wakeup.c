@@ -785,6 +785,13 @@ static void print_active_wakeup_sources(void)
 	rcu_read_unlock();
 }
 
+#ifdef CONFIG_BOEFFLA_WL_BLOCKER
+void pm_print_active_wakeup_sources(void)
+{
+	print_active_wakeup_sources();
+}
+#endif
+
 /**
  * pm_wakeup_pending - Check if power transition in progress should be aborted.
  *
