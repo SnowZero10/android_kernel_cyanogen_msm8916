@@ -51,3 +51,17 @@ config FB_MSM_MDSS_KCAL_CTRL
 	---help---
 	  Enable sysfs for rgb/lut control for mdss-mdp display controllers
 	  in the MDSS sub-system.
+
+config DISPLAY_STATE
+	depends on FB_MSM_MDSS
+	bool "display state control"
+	---help---
+	  Enable display state control for mdss-mdp display controllers
+	  in the MDSS sub-system.
+
+config BACKLIGHT_DIMMER
+	depends on FB_MSM_MDSS
+	bool "backlight control"
+	---help---
+	  Enable backlight control for mdss-mdp display controllers
+	  in the MDSS sub-system.
