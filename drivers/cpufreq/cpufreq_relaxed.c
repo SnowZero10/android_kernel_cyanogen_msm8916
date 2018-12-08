@@ -12,6 +12,7 @@
  * published by the Free Software Foundation.
  */
 
+#include <linux/err.h>
 #include <linux/slab.h>
 #include "cpufreq_governor.h"
 #include <linux/display_state.h>
