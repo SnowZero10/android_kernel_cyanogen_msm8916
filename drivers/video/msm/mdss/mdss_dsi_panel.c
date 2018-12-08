@@ -48,7 +48,6 @@
 
 DEFINE_LED_TRIGGER(bl_led_trigger);
 
-
 #ifdef CONFIG_DISPLAY_STATE
 bool display_on = true;
 
@@ -769,7 +768,7 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 
 #ifdef CONFIG_DISPLAY_STATE
 	display_on = false;
-#ifdef CONFIG_DISPLAY_STATE
+#endif
 
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_panel_hook(POWER_SUSPEND_ACTIVE);
