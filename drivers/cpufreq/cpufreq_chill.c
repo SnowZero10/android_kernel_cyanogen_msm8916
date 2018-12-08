@@ -440,7 +440,7 @@ static struct notifier_block cs_cpufreq_notifier_block = {
 	.notifier_call = dbs_cpufreq_notifier,
 };
 
-static struct cs_ops cs_ops = {
+static struct cs_opss cs_ops = {
 	.notifier_block = &cs_cpufreq_notifier_block,
 };
 
