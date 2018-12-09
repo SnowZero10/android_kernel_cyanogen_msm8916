@@ -150,10 +150,6 @@ struct cpufreq_interactive_tunables {
 
 	/* Ignore min_sample_time for notification */
 	bool fast_ramp_down;
-
-	/* Maximum frequency while the screen is off */
-#define DEFAULT_SCREEN_OFF_MAX 998400
-	unsigned long screen_off_max;
 };
 
 /* For cases where we have single governor instance for system */
@@ -1244,31 +1240,6 @@ static ssize_t store_fastlane_threshold(
 	return count;
 }
 
-static ssize_t show_screen_off_maxfreq(
-		struct cpufreq_interactive_tunables *tunables,
-                char *buf)
-{
-	return sprintf(buf, "%lu\n", tunables->screen_off_max);
-}
-
-static ssize_t store_screen_off_maxfreq(
-		struct cpufreq_interactive_tunables *tunables,
-                const char *buf, size_t count)
-{
-	int ret;
-	unsigned long val;
-
-	ret = strict_strtoul(buf, 0, &val);
-	if (ret < 0)
-		return ret;
-
-	if (val < 384000)
-		tunables->screen_off_max = DEFAULT_SCREEN_OFF_MAX;
-	else
-		tunables->screen_off_max = val;
-
-	return count;
-}
 
 /*
  * Create show/store routines
@@ -1322,7 +1293,6 @@ show_store_gov_pol_sys(fastlane);
 show_store_gov_pol_sys(fastlane_threshold);
 show_store_gov_pol_sys(ignore_hispeed_on_notif);
 show_store_gov_pol_sys(fast_ramp_down);
-show_store_gov_pol_sys(screen_off_maxfreq);
 
 #define gov_sys_attr_rw(_name)						\
 static struct global_attr _name##_gov_sys =				\
@@ -1352,7 +1322,6 @@ gov_sys_pol_attr_rw(fastlane);
 gov_sys_pol_attr_rw(fastlane_threshold);
 gov_sys_pol_attr_rw(ignore_hispeed_on_notif);
 gov_sys_pol_attr_rw(fast_ramp_down);
-gov_sys_pol_attr_rw(screen_off_maxfreq);
 
 /* One Governor instance for entire system */
 static struct attribute *interactive_attributes_gov_sys[] = {
@@ -1372,7 +1341,6 @@ static struct attribute *interactive_attributes_gov_sys[] = {
 	&fastlane_threshold_gov_sys.attr,
 	&ignore_hispeed_on_notif_gov_sys.attr,
 	&fast_ramp_down_gov_sys.attr,
-	&screen_off_maxfreq_gov_sys.attr,
 	NULL,
 };
 
@@ -1399,7 +1367,6 @@ static struct attribute *interactive_attributes_gov_pol[] = {
 	&fastlane_threshold_gov_pol.attr,
 	&ignore_hispeed_on_notif_gov_pol.attr,
 	&fast_ramp_down_gov_pol.attr,
-	&screen_off_maxfreq_gov_pol.attr,
 	NULL,
 };
 
@@ -1440,7 +1407,6 @@ static struct cpufreq_interactive_tunables *alloc_tunable(
 	tunables->timer_slack_val = DEFAULT_TIMER_SLACK;
 	tunables->fastlane = false;
 	tunables->fastlane_threshold = 50;
-	tunables->screen_off_max = DEFAULT_SCREEN_OFF_MAX;
 
 	spin_lock_init(&tunables->target_loads_lock);
 	spin_lock_init(&tunables->above_hispeed_delay_lock);
