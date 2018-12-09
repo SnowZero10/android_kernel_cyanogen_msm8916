@@ -21,9 +21,6 @@
 #include <linux/leds.h>
 #include <linux/qpnp/pwm.h>
 #include <linux/err.h>
-#ifdef CONFIG_DISPLAY_STATE
-#include <linux/display_state.h>
-#endif
 #include "mdss_dsi.h"
 
 #ifdef CONFIG_POWERSUSPEND
@@ -47,15 +44,6 @@
 #endif
 
 DEFINE_LED_TRIGGER(bl_led_trigger);
-
-#ifdef CONFIG_DISPLAY_STATE
-bool display_on = true;
-
-bool is_display_on()
-{
-	return display_on;
-}
-#endif
 
 void mdss_dsi_panel_pwm_cfg(struct mdss_dsi_ctrl_pdata *ctrl)
 {
@@ -673,10 +661,6 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 	gpio_set_value(TPS65132_GPIO_NEG_EN, 1);
 #endif
 
-#ifdef CONFIG_DISPLAY_STATE
-	display_on = true;
-#endif
-
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_panel_hook(POWER_SUSPEND_INACTIVE);
 #endif
@@ -765,10 +749,6 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 
 	if (ctrl->off_cmds.cmd_cnt)
 		mdss_dsi_panel_cmds_send(ctrl, &ctrl->off_cmds);
-
-#ifdef CONFIG_DISPLAY_STATE
-	display_on = false;
-#endif
 
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_panel_hook(POWER_SUSPEND_ACTIVE);
