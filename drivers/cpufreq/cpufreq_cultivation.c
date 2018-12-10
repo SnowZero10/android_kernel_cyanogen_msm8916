@@ -30,11 +30,7 @@
 #include <linux/workqueue.h>
 #include <linux/kthread.h>
 #include <linux/slab.h>
-#ifdef CONFIG_STATE_NOTIFIER
 #include <linux/state_notifier.h>
-#else
-extern bool display_on;
-#endif
 
 /* cultivation version */
 #define CULTIVATION_VERSION_MAJOR	(1)
@@ -432,17 +428,10 @@ static void cpufreq_cultivation_timer(unsigned long data)
 	atomic_notifier_call_chain(&cpufreq_govinfo_notifier_list,
 					CPUFREQ_LOAD_CHANGE, &int_info);
 
-#ifdef CONFIG_STATE_NOTIFIER
 	if (!state_suspended &&
 		tunables->timer_rate != tunables->prev_timer_rate)
 		tunables->timer_rate = tunables->prev_timer_rate;
 	else if (state_suspended &&
-#else
-	if (display_on &&
-		tunables->timer_rate != tunables->prev_timer_rate)
-		tunables->timer_rate = tunables->prev_timer_rate;
-	else if (!display_on &&
-#endif
 		tunables->timer_rate != tunables->timer_rate_screenoff) {
 		tunables->prev_timer_rate = tunables->timer_rate;
 		tunables->timer_rate
@@ -636,11 +625,7 @@ static int cpufreq_cultivation_speedchange_task(void *data)
 
 			if (max_freq != pcpu->policy->cur) {
 				tunables = pcpu->policy->governor_data;
-#ifdef CONFIG_STATE_NOTIFIER
 				if (tunables->powersave_bias || state_suspended)
-#else
-				if (tunables->powersave_bias || !display_on)
-#endif
 					__cpufreq_driver_target(pcpu->policy,
 								max_freq,
 								CPUFREQ_RELATION_C);
@@ -661,6 +646,7 @@ static int cpufreq_cultivation_speedchange_task(void *data)
 	return 0;
 }
 
+/* 
 static int load_change_callback(struct notifier_block *nb, unsigned long val,
 				void *data)
 {
@@ -689,7 +675,7 @@ static int load_change_callback(struct notifier_block *nb, unsigned long val,
 
 static struct notifier_block load_notifier_block = {
 	.notifier_call = load_change_callback,
-};
+}; */
 
 static int cpufreq_cultivation_notifier(
 	struct notifier_block *nb, unsigned long val, void *data)
@@ -1513,9 +1499,6 @@ static int __init cpufreq_cultivation_init(void)
 	struct cpufreq_cultivation_cpuinfo *pcpu;
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO-1 };
 
-#ifndef CONFIG_STATE_NOTIFIER
-	display_on = true
-#endif
 	/* Initalize per-cpu timers */
 	for_each_possible_cpu(i) {
 		pcpu = &per_cpu(cpuinfo, i);
