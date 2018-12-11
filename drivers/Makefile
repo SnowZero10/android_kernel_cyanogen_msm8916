@@ -168,3 +168,5 @@ obj-$(CONFIG_SENSORS)		+= sensors/
 obj-$(CONFIG_SENSORS_SSC)	+= sensors/
 
 obj-$(CONFIG_FORCE_FAST_CHARGE) += fastcharge/
+
+obj-$(CONFIG_ANDROID)		+= android/
