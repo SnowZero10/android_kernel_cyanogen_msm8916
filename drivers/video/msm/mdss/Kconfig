@@ -45,7 +45,7 @@ config FB_MSM_MDSS_MDP3
 	included in latest display sub-system, known as MDSS.
 
 config FB_MSM_MDSS_KCAL_CTRL
-	depends on FB_MSM_MDSS
+	depends on FB_MSM_MDSS && ARCH_MSM8916
 	bool "MDSS color control"
 	default y
 	---help---
