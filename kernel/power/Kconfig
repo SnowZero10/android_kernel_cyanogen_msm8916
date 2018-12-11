@@ -325,3 +325,7 @@ config BOEFFLA_WL_BLOCKER
 	bool "Boeffla generic wakelock blocker driver"
 	depends on PM
 	default N
+
+config VOLTAGE_CONTROL
+	bool "control voltage cpufreq"
+	default N

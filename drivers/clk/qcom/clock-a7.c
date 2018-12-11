@@ -66,7 +66,7 @@ static struct clk_lookup clock_tbl_a7[] = {
 	CLK_LOOKUP_OF("cpu3_clk",   a7ssmux, "8600664.qcom,pm"),
 };
 
-#ifdef CONFIG_ARCH_MSM8916
+#ifdef CONFIG_VOLTAGE_CONTROL
 extern int cpr_regulator_get_corner_voltage(struct regulator *regulator,
 		int corner);
 extern int cpr_regulator_set_corner_voltage(struct regulator *regulator,
